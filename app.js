@@ -15,13 +15,37 @@ app.use(helmet());
 app.use(xss());
 
 connection.connect(err => {
-  if (err)
-    throw err;
-  console.log("Connected!");
+  if (err) {
+    console.error('Error when connecting DB: ', err.stack);
+    return;
+  }
+  console.log('Database connection successful as: ', connection.threadId);
+});
+
+const selectValuesQuery = `SELECT * FROM \`wig20DailyPoints\` `;
+
+let selectQueryResult;
+  
+connection.query(selectValuesQuery, (err, results) => {
+  if (err) {
+    console.error('Error when quering: ', err);
+    return;
+  }
+
+  console.log('result: ', results);
+  selectQueryResult = results;
+
+  connection.end(err => {
+    if (err) {
+      console.error('Error when disconnecting DB: ' + err);
+      return;
+    }
+    console.log('DB disconnected succesfully');
+  });
 });
 
 app.get('/', (req, res) => {
-  res.send('Welcome to stock-API!');
+  res.send('Welcome to stock-API!: <br /><br />' + JSON.stringify(selectQueryResult));
 })
 
 const port = process.env.PORT || 5000;
