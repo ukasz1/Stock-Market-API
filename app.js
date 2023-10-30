@@ -5,7 +5,9 @@ const cors = require('cors');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 
-const connection = require('./config/connect')
+const connection = require('./config/connect');
+
+const getIndex = require('./queries/getIndex');
 
 const app = express();
 
@@ -14,6 +16,7 @@ app.use(cors());
 app.use(helmet());
 app.use(xss());
 
+// Establishing DB connection
 connection.connect(err => {
   if (err) {
     console.error('Error when connecting DB: ', err.stack);
@@ -22,31 +25,19 @@ connection.connect(err => {
   console.log('Database connection successful as: ', connection.threadId);
 });
 
-const selectValuesQuery = `SELECT * FROM \`wig20DailyPoints\` `;
-
-let selectQueryResult;
-  
-connection.query(selectValuesQuery, (err, results) => {
-  if (err) {
-    console.error('Error when quering: ', err);
-    return;
-  }
-
-  console.log('result: ', results);
-  selectQueryResult = results;
-
-  connection.end(err => {
-    if (err) {
-      console.error('Error when disconnecting DB: ' + err);
-      return;
-    }
-    console.log('DB disconnected succesfully');
-  });
+// Endpoints
+app.get('/', (req, res) => {
+  res.send('<h2>Welcome to stock-API!<h2>');
 });
 
-app.get('/', (req, res) => {
-  res.send('Welcome to stock-API!: <br /><br />' + JSON.stringify(selectQueryResult));
-})
+app.get('/wig20', async (req, res) => {
+  try {
+    const data = await getIndex(connection);
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'DB error' });
+  }
+});
 
 const port = process.env.PORT || 5000;
 
