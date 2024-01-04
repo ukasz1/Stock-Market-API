@@ -7,7 +7,7 @@ const xss = require('xss-clean');
 
 const connection = require('./config/connect');
 
-const getIndex = require('./queries/getIndex');
+const {getIndex, getIndexLine} = require('./queries/getIndex');
 
 const app = express();
 
@@ -33,6 +33,15 @@ app.get('/', (req, res) => {
 app.get('/wig20', async (req, res) => {
   try {
     const data = await getIndex(connection);
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'DB error' });
+  }
+});
+
+app.get('/wig20-line', async (req, res) => {
+  try {
+    const data = await getIndexLine(connection);
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ error: 'DB error' });
