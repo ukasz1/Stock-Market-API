@@ -7,7 +7,7 @@ const xss = require('xss-clean');
 
 const connection = require('./config/connect');
 
-const {getIndex, getIndexLine} = require('./queries/getIndex');
+const {getCandlestickIndexDetails, getIndexValues} = require('./queries/getIndex');
 
 const app = express();
 
@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 
 app.get('/wig20', async (req, res) => {
   try {
-    const data = await getIndex(connection);
+    const data = await getCandlestickIndexDetails(connection);
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ error: 'DB error' });
@@ -41,7 +41,7 @@ app.get('/wig20', async (req, res) => {
 
 app.get('/wig20-line', async (req, res) => {
   try {
-    const data = await getIndexLine(connection);
+    const data = await getIndexValues(connection);
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ error: 'DB error' });

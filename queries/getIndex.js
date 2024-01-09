@@ -1,8 +1,8 @@
-const getIndex = (connection) => {
+const getCandlestickIndexDetails = (connection) => {
   return new Promise((resolve, reject) => {
-    const getAllIndexQuery = `SELECT * FROM ${process.env.WIG20TABLE} `;
+    const getCandlestickDataQuery = `SELECT * FROM ${process.env.WIG20TABLE} `;
 
-    connection.query(getAllIndexQuery, (err, results) => {
+    connection.query(getCandlestickDataQuery, (err, results) => {
       if (err) {
         console.error('Error when querying: ', err);
         reject(err);
@@ -14,11 +14,11 @@ const getIndex = (connection) => {
   })
 }
 
-const getIndexLine = (connection) => {
+const getIndexValues = (connection) => {
   return new Promise((resolve, reject) => {
-    const getAllIndexQuery = `SELECT close, time FROM ${process.env.WIG20TABLE} `;
+    const getIndexValuesQuery = `SELECT close, time FROM ${process.env.WIG20TABLE} `;
 
-    connection.query(getAllIndexQuery, (err, results) => {
+    connection.query(getIndexValuesQuery, (err, results) => {
       if (err) {
         console.error('Error when querying: ', err);
         reject(err);
@@ -31,6 +31,6 @@ const getIndexLine = (connection) => {
 }
 
 module.exports = {
-  getIndex,
-  getIndexLine
+  getCandlestickIndexDetails,
+  getIndexValues
 };
