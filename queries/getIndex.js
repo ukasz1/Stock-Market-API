@@ -8,7 +8,6 @@ const getCandlestickIndexDetails = (connection) => {
         reject(err);
         return;
       }
-      console.log('result: ', results);
       resolve(results);
     });
   })
@@ -24,7 +23,6 @@ const getIndexValues = (connection) => {
         reject(err);
         return;
       }
-      console.log('result: ', results);
       resolve(results);
     });
   })
