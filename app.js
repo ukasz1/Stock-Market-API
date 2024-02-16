@@ -36,7 +36,6 @@ app.get('/wig20', async (req, res) => {
   switch (dataType) {
     case 'line':
       try {
-        console.log('send chart: line');
         const data = await getCandlestickIndexDetails(connection);
         res.status(200).json(data);
       } catch (error) {
@@ -45,7 +44,6 @@ app.get('/wig20', async (req, res) => {
       break;
     case 'candlestick':
       try {
-        console.log('send chart: candlestick');
         const data = await getCandlestickIndexDetails(connection);
         res.status(200).json(data);
       } catch (error) {
