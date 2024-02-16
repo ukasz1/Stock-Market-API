@@ -31,28 +31,25 @@ app.get('/', (req, res) => {
 });
 
 app.get('/wig20', async (req, res) => {
-  const dataType = req.query.type;
+  const chartType = req.query.type;
 
-  switch (dataType) {
-    case 'line':
-      try {
-        const data = await getCandlestickIndexDetails(connection);
-        res.status(200).json(data);
-      } catch (error) {
-        res.status(500).json({ error: 'DB error' });
-      }
-      break;
-    case 'candlestick':
-      try {
-        const data = await getCandlestickIndexDetails(connection);
-        res.status(200).json(data);
-      } catch (error) {
-        res.status(500).json({ error: 'DB error' });
-      }
-      break;
-    default:
-      console.log('Chart type error - bad request');
-      res.status(400).json({ error: 'Bad request'})
+  if (chartType === 'line') {
+    try {
+      const data = await getCandlestickIndexDetails(connection);
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ error: 'DB error' });
+    }
+  } else if (chartType === 'candlestick') {
+    try {
+      const data = await getCandlestickIndexDetails(connection);
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ error: 'DB error' });
+    }
+  } else {
+    console.log('Chart type error - bad request');
+    res.status(400).json({ error: 'Bad request'})
   }
 });
 
